@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV Builder - Dashboard</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+
+    <!-- Loading Overlay - sichtbar bis loadCv() die Daten geladen hat -->
+    <div id="loadingOverlay">CV wird geladen...</div>
+
+    <!-- Navbar -->
+    <nav>
+        <div class="logo">CV<span>Builder</span></div>
+        <div class="nav-right">
+            <span id="usernameDisplay"></span>
+            <!-- logout() löscht den Token und leitet zu index.html weiter -->
+            <button class="btn" onclick="logout()">Abmelden</button>
+            <button id="deleteCvBtn" class="btn btn-danger" disabled onclick="deleteCv()">CV löschen</button>            
+            <!-- exportPdf() ruft GET /api/cv/export/pdf auf -->
+            <button class="btn btn-accent" onclick="exportPdf()">PDF exportieren</button>
+        </div>
+    </nav>
+
+    <div class="layout">
+
+        <!-- Sidebar Navigation -->
+        <aside>
+            <p class="sidebar-label">Lebenslauf</p>
+
+            <!-- showSection('personals') blendet die passende Sektion ein -->
+            <div class="nav-item active" onclick="showSection('personals')">Persönliche Daten</div>
+            <div class="nav-item" onclick="showSection('experiences')">Berufserfahrung</div>
+            <div class="nav-item" onclick="showSection('educations')">Ausbildung</div>
+            <div class="nav-item" onclick="showSection('skills')">Kenntnisse</div>
+            <div class="nav-item" onclick="showSection('certificates')">Zertifikate</div>
+            <div class="nav-item" onclick="showSection('internships')">Praktika</div>
+            <div class="nav-item" onclick="showSection('volunteers')">Ehrenamt</div>
+            <div class="nav-item" onclick="showSection('hobbies')">Hobbies</div>
+            <div class="nav-item" onclick="showSection('signature')">Signatur</div>
+        </aside>
+
+        <!-- Hauptbereich -->
+        <main>
+
+            <!-- ── Persönliche Daten ── -->
+            <section class="section active" id="section-personals">
+                <h1 class="section-title">Persönliche Daten</h1>
+                <p class="section-subtitle">Grundlegende Informationen für deinen Lebenslauf.</p>
+                <div class="card">
+                    <div class="form-grid">
+                        <div class="field">
+                            <label for="firstname">Vorname</label>
+                            <input type="text" id="firstname" />
+                        </div>
+                        <div class="field">
+                            <label for="lastname">Nachname</label>
+                            <input type="text" id="lastname" />
+                        </div>
+                        <div class="field">
+                            <label for="email">E-Mail</label>
+                            <input type="email" id="email" />
+                        </div>
+                        <div class="field">
+                            <label for="phone">Telefon</label>
+                            <input type="tel" id="phone" />
+                        </div>
+                        <div class="field">
+                            <label for="street">Straße</label>
+                            <input type="text" id="street" />
+                        </div>
+                        <div class="field">
+                            <label for="city">Stadt</label>
+                            <input type="text" id="city" />
+                        </div>
+                        <div class="field">
+                            <label for="zip">PLZ</label>
+                            <input type="text" id="zip" />
+                        </div>
+                        <div class="field">
+                            <label for="country">Land</label>
+                            <input type="text" id="country" />
+                        </div>
+                        <div class="field">
+                            <label for="birthDate">Geburtsdatum</label>
+                            <input type="date" id="birthDate" />
+                        </div>
+                        <div class="field">
+                            <label for="birthplace">Geburtsort</label>
+                            <input type="text" id="birthplace" />
+                        </div>
+                        <div class="field full">
+                            <label for="summary">Profil / Zusammenfassung</label>
+                            <textarea id="summary"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <!-- savePersonalInfo() ruft POST /api/cv/personals auf -->
+                        <button class="btn btn-accent" onclick="savePersonalInfo()">Speichern</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ── Berufserfahrung ── -->
+            <section class="section" id="section-experiences">
+                <h1 class="section-title">Berufserfahrung</h1>
+                <p class="section-subtitle">Füge deine bisherigen Stellen hinzu.</p>
+                <!-- renderExperiences() befüllt diese Liste aus dem CV -->
+                <div class="entry-list" id="list-experiences"></div>
+                <div class="card">
+                    <div class="form-grid">
+                        <div class="field">
+                            <label for="exp-company">Unternehmen</label>
+                            <input type="text" id="exp-company" placeholder="z.B. Muster GmbH" />
+                        </div>
+                        <div class="field">
+                            <label for="exp-role">Rolle</label>
+                            <input type="text" id="exp-role" placeholder="z.B. Fachinformatiker" />
+                        </div>
+                        <div class="field">
+                            <label for="exp-dateFrom">von:</label>
+                            <input type="date" id="exp-dateFrom" />
+                        </div>
+                        <div class="field">
+                            <label for="exp-dateTo">bis:</label>
+                            <input type="date" id="exp-dateTo" />
+                        </div>
+                        <div class="field">
+                            <label for="exp-description">Beschreibung</label>
+                            <input type="text" id="exp-description" placeholder="z.B. Ausbildung" />
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button class="btn" onclick="showAddExperience()">+ Eintrag hinzufügen</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ── Ausbildung ── -->
+            <section class="section" id="section-educations">
+                <h1 class="section-title">Ausbildung</h1>
+                <p class="section-subtitle">Schulen, Ausbildungen, Studium.</p>
+                <div class="entry-list" id="list-educations"></div>
+                <div class="card">
+                    <div class="form-grid">
+                        <div class="field">
+                            <label for="edu-institution">Institution</label>
+                            <input type="text" id="edu-institution" placeholder="z.B. Muster GmbH" />
+                        </div>
+                        <div class="field">
+                            <label for="edu-degree">Abschluss</label>
+                            <input type="text" id="edu-degree" placeholder="z.B. Fachinformatiker für Awe" />
+                        </div>
+                        <div class="field">
+                            <label for="edu-fieldOfStudy">Fachbereich</label>
+                            <input type="text" id="edu-fieldOfStudy" placeholder="z.B. Informatik" />
+                        </div>
+                        <div class="field">
+                            <label for="edu-dateFrom">von:</label>
+                            <input type="date" id="edu-dateFrom" />
+                        </div>
+                        <div class="field">
+                            <label for="edu-dateTo">bis:</label>
+                            <input type="date" id="edu-dateTo" />
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button class="btn" onclick="showAddEducation()">+ Eintrag hinzufügen</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ── Kenntnisse ── -->
+            <section class="section" id="section-skills">
+                <h1 class="section-title">Kenntnisse</h1>
+                <p class="section-subtitle">Sprachen, IT-Kenntnisse, sonstige Fähigkeiten.</p>
+                <div class="entry-list" id="list-skills"></div>
+                <!-- Eingabefelder für einen neuen Skill -->
+                <div class="card">
+                    <div class="form-grid">
+                        <div class="field">
+                            <label for="skillName">Bezeichnung</label>
+                            <input type="text" id="skillName" placeholder="z.B. Java" />
+                        </div>
+                        <div class="field">
+                            <label for="skillCategory">Kategorie</label>
+                            <input type="text" id="skillCat" placeholder="z.B. Programmierung" />
+                            <!-- <select id="skillCategory">
+                                <option value="IT">IT</option>
+                                <option value="LANGUAGE">Sprache</option>
+                                <option value="OTHER">Sonstiges</option>
+                            </select> -->
+                        </div>
+                        <div class="field">
+                            <label for="skillLevel">Level</label>
+                            <input type="text" id="skillLevel" placeholder="z.B. Fortgeschritten" />
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button class="btn btn-accent" onclick="showAddSkill()">Hinzufügen</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ── Zertifikate ── -->
+            <section class="section" id="section-certificates">
+                <h1 class="section-title">Zertifikate</h1>
+                <p class="section-subtitle">Nachweise und Zertifizierungen.</p>
+                <div class="entry-list" id="list-certificates"></div>
+                <div class="card">
+                    <div class="form-grid">
+                        <div class="field">
+                            <label for="cert-title">Name</label>
+                            <input type="text" id="cert-title" placeholder="z.B. CISP" />
+                        </div>
+                        <div class="field">
+                            <label for="cert-issuer">Aussteller</label>
+                            <input type="text" id="cert-issuer" placeholder="z.B. Muster GmbH" />
+                        </div>
+                        <div class="field">
+                            <label for="cert-dateIssued">Ausgestellt am</label>
+                            <input type="date" id="cert-dateIssued" />
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button class="btn" onclick="showAddCertificate()">+ Zertifikat hinzufügen</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ── Praktika ── -->
+            <section class="section" id="section-internships">
+                <h1 class="section-title">Praktika</h1>
+                <p class="section-subtitle">Praktische Erfahrungen während der Ausbildung.</p>
+                <div class="entry-list" id="list-internships"></div>
+                <div class="card">
+                    <div class="form-grid">
+                        <div class="field">
+                            <label for="inter-company">Unternehmen</label>
+                            <input type="text" id="inter-company" placeholder="z.B. Muster GmbH" />
+                        </div>
+                        <div class="field">
+                            <label for="inter-role">Rolle</label>
+                            <input type="text" id="inter-role" placeholder="z.B. Fachinformatiker" />
+                        </div>
+                        <div class="field">
+                            <label for="inter-dateFrom">von:</label>
+                            <input type="date" id="inter-dateFrom" />
+                        </div>
+                        <div class="field">
+                            <label for="inter-dateTo">bis:</label>
+                            <input type="date" id="inter-dateTo" />
+                        </div>
+                        <div class="field">
+                            <label for="inter-description">Beschreibung</label>
+                            <input type="text" id="inter-description" placeholder="z.B. Praktika Xy" />
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button class="btn" onclick="showAddInternship()">+ Praktikum hinzufügen</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ── Ehrenamt ── -->
+            <section class="section" id="section-volunteers">
+                <h1 class="section-title">Ehrenamtliches Engagement</h1>
+                <p class="section-subtitle">Freiwillige Tätigkeiten und soziales Engagement.</p>
+                <div class="entry-list" id="list-volunteers"></div>
+                <div class="card">
+                    <div class="form-grid">
+                        <div class="field">
+                            <label for="volu-organization">Unternehmen</label>
+                            <input type="text" id="volu-organization" placeholder="z.B. Muster GmbH" />
+                        </div>
+                        <div class="field">
+                            <label for="volu-role">Rolle</label>
+                            <input type="text" id="volu-role" placeholder="z.B. Fachinformatiker" />
+                        </div>
+                        <div class="field">
+                            <label for="volu-dateFrom">von:</label>
+                            <input type="date" id="volu-dateFrom" />
+                        </div>
+                        <div class="field">
+                            <label for="volu-dateTo">bis:</label>
+                            <input type="date" id="volu-dateTo" />
+                        </div>
+                        <div class="field">
+                            <label for="volu-description">Beschreibung</label>
+                            <input type="text" id="volu-description" placeholder="z.B. Praktika Xy" />
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button class="btn" onclick="showAddVolunteer()">+ Eintrag hinzufügen</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ── Hobbies ── -->
+            <section class="section" id="section-hobbies">
+                <h1 class="section-title">Hobbies & Interessen</h1>
+                <p class="section-subtitle">Was machst du in deiner Freizeit?</p>
+                <div class="entry-list" id="list-hobbies"></div>
+                <div class="card">
+                    <div class="field">
+                        <label for="hobbyName">Hobby</label>
+                        <input type="text" id="hobbyName" placeholder="z.B. Fotografie" />
+                    </div>
+                    <div class="form-actions">
+                        <!-- addHobby() ruft POST /api/cv/hobbies auf -->
+                        <button class="btn btn-accent" onclick="addHobby()">Hinzufügen</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ── Signatur ── -->
+            <section class="section" id="section-signature">
+                <h1 class="section-title">Signatur</h1>
+                <p class="section-subtitle">Ort und Datum für die Unterschrift im PDF.</p>
+                <div class="card">
+                    <div class="form-grid">
+                        <div class="field">
+                            <label for="sigCity">Ort</label>
+                            <input type="text" id="sigCity" />
+                        </div>
+                        <div class="field">
+                            <label for="sigDate">Datum</label>
+                            <input type="date" id="sigDate" />
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <!-- saveSignature() ruft POST /api/cv/signature auf -->
+                        <button class="btn btn-accent" onclick="saveSignature()">Speichern</button>
+                        <button class="btn btn-accent" onclick="deleteSignature()">Löschen</button>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+    <script src="js/cv.js"></script>
+</body>
+</html>

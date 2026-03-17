@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV Builder - Login</title>
+    <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <div class="logo">CV<span>Builder</span></div>
+        <p class="tagline">Erstelle deinen professionellen Lebenslauf</p>
+    </div>
+
+    <div class="card">
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('login')">Anmelden</button>
+            <button class="tab" onclick="switchTab('register')">Registrieren</button>
+        </div>
+
+        <!-- Login Form -->
+        <form class="form active" id="loginForm" onsubmit="handleLogin(event)">
+            <div id="loginMessage" class="message"></div>
+
+            <div class="field">
+                <label for="loginUsername">Benutzername</label>
+                <input type="text" id="loginUsername" placeholder="dein_name" required />
+            </div>
+
+            <div class="field">
+                <label for="loginPassword">Passwort</label>
+                <input type="password" id="loginPassword" placeholder="••••••••" required />
+            </div>
+
+            <button type="submit" class="btn btn-primary" id="loginBtn">
+                Anmelden
+            </button>
+        </form>
+
+        <!-- Register Form -->
+        <form class="form" id="registerForm" onsubmit="handleRegister(event)">
+            <div id="registerMessage" class="message"></div>
+
+            <div class="field">
+                <label for="regUsername">Benutzername</label>
+                <input type="text" id="regUsername" placeholder="dein_name" required />
+            </div>
+
+            <div class="field">
+                <label for="regEmail">E-Mail</label>
+                <input type="email" id="regEmail" placeholder="name@beispiel.de" required />
+            </div>
+
+            <div class="field">
+                <label for="regPassword">Passwort</label>
+                <input type="password" id="regPassword" placeholder="••••••••" required minlength="6" />
+            </div>
+
+            <button type="submit" class="btn btn-primary" id="registerBtn">
+                Konto erstellen
+            </button>
+        </form>
+
+    </div>
+
+    <p class="hint">Deine Daten werden sicher gespeichert.</p>
+
+</div>
+
+<script src="js/auth.js"></script>
+
+</body>
+</html>

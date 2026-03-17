@@ -1,0 +1,120 @@
+{
+  "title": "MeinCv",
+  "personals": {
+    "firstname": "Max",
+    "lastname": "Mustermann",
+    "street": "Strasse",
+    "city": "stadt",
+    "zip": "01234",
+    "country": "land",
+    "phone": "0123456789",
+    "email": "email@mail.de",
+    "birthDate": "2000-01-01",
+    "birthplace": "somewhere",
+    "summary": "Hier steht ein ganz besonderer text."
+  },
+  "signature": {
+    "city": "signatureStadt",
+    "signatureDate": "2026-12-01",
+    "signaturePath": null
+  },
+  "experiences": [
+    {
+      "company": "experiences1",
+      "role": "exp-role1",
+      "dateFrom": "2025-01-01",
+      "dateTo": "2025-06-01",
+      "description": "description1"
+    },
+    {
+      "company": "experiences2",
+      "role": "exp-role2",
+      "dateFrom": "2025-01-01",
+      "dateTo": "2025-06-01",
+      "description": "description2"
+    }
+  ],
+  "certificates": [
+    {
+      "title": "certificate1",
+      "issuer": "cert-issuer1",
+      "dateIssued": "2025-01-01"
+    },
+    {
+      "title": "certificate2",
+      "issuer": "cert-issuer2",
+      "dateIssued": "2025-12-01"
+    }
+  ],
+  "educations": [
+    {
+      "institution": "educations1",
+      "degree": "degree1",
+      "fieldOfStudy": "field1",
+      "dateFrom": "2025-01-01",
+      "dateTo": "2025-02-01"
+    },
+    {
+      "institution": "educations2",
+      "degree": "degree2",
+      "fieldOfStudy": "field2",
+      "dateFrom": "2026-06-01",
+      "dateTo": "2025-12-01"
+    }
+  ],
+  "hobbies": [
+    {
+      "name": "programmieren"
+    },
+    {
+      "name": "musizieren"
+    },
+    {
+      "name": "Malen"
+    }
+  ],
+  "internships": [
+    {
+      "company": "internships1",
+      "role": "inter-role1",
+      "dateFrom": "2025-01-01",
+      "dateTo": "2025-06-01",
+      "description": "description1"
+    },
+    {
+      "company": "internships2",
+      "role": "inter-role2",
+      "dateFrom": "2025-07-01",
+      "dateTo": "2025-12-01",
+      "description": "description2"
+    }
+  ],
+  "skills": [
+    {
+      "name": "skill1",
+      "category": "categ1",
+      "level": "beginner"
+    },
+    {
+      "name": "skill2",
+      "category": "categ2",
+      "level": "intermediate"
+    }
+  ],
+  "volunteers": [
+    {
+      "organization": "volunteer1",
+      "role" : "vol-role1",
+      "dateFrom": "2026-01-01",
+      "dateTo": "2026-06-01",
+      "description": "description1"
+    },
+    {
+      "organization": "volunteer2",
+      "role" : "vol-role2",
+      "dateFrom": "2026-07-01",
+      "dateTo": "2026-12-01",
+      "description": "description2"
+    }
+  ]
+}
