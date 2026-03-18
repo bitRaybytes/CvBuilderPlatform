@@ -21,6 +21,11 @@ import com.itextpdf.text.pdf.draw.LineSeparator;
 import java.io.ByteArrayOutputStream;
 import java.util.List;
 
+/**
+ * Appliying for a job with this resumee is not recommended yet. :)
+ */
+
+
 @Service
 public class PdfExportService {
 
