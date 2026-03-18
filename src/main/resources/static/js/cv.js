@@ -109,12 +109,23 @@ function renderList(name, items, formatFn) {
         div.innerHTML = `
             <span>${formatFn(item)}</span>
             <div class="entry-actions">
-                <button class="btn-icon" onclick="edit${capitalize(name)}('${item.id}')">Bearbeiten</button>
+                <button class="btn-icon" onclick="edit${capitalize(name)}('${name}','${item.id}')">Bearbeiten</button>
                 <button class="btn-icon delete" onclick="deleteListing('${name}','${item.id}')">Löschen</button>
-                </div>
+            </div>
         `;
         list.appendChild(div);
     });
+}
+
+// ── Experiences : Listeneinträge editieren ─────────────────────────────────
+function editExperiences(id){
+
+    // const exp = cvData.experiences;
+    
+    // const company = document.getElementById("exp-company");
+    // company.value = exp.company || "test";
+    // console.log(company);
+    // console.log(company.value);
 }
 
 
@@ -463,7 +474,7 @@ async function deleteCv(id){
 
 // ── Platzhalter für noch nicht implementierte Methoden ───
 // Diese Schritt für Schritt in cv.js ausbauen
-function editExperiences(id)  { console.log("editExperience - TODO", id); }
+// function editExperiences(id)  { console.log("editExperience - TODO", id); }
 function editEducations(id)   { console.log("editEducation - TODO", id); }
 function editSkills(id)       { console.log("editSkill - TODO", id); }
 function editCertificates(id) { console.log("editCertificate - TODO", id); }
