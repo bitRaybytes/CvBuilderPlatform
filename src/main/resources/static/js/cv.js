@@ -109,7 +109,7 @@ function renderList(name, items, formatFn) {
         div.innerHTML = `
             <span>${formatFn(item)}</span>
             <div class="entry-actions">
-                <button class="btn-icon" onclick="edit${capitalize(name)}('${name}','${item.id}')">Bearbeiten</button>
+                <button class="btn-icon" onclick="edit${capitalize(name)}('${item.id}')">Bearbeiten</button>
                 <button class="btn-icon delete" onclick="deleteListing('${name}','${item.id}')">Löschen</button>
             </div>
         `;
@@ -118,14 +118,61 @@ function renderList(name, items, formatFn) {
 }
 
 // ── Experiences : Listeneinträge editieren ─────────────────────────────────
-function editExperiences(id){
+function editExperiences(id) {
+    const exp = cvData.experiences.find(e => e.id === id);
+    if (!exp) return;
 
-    // const exp = cvData.experiences;
-    
-    // const company = document.getElementById("exp-company");
-    // company.value = exp.company || "test";
-    // console.log(company);
-    // console.log(company.value);
+    // Felder befüllen damit der User sie sieht
+    document.getElementById("exp-company").value     = exp.company     || "";
+    document.getElementById("exp-role").value        = exp.role        || "";
+    document.getElementById("exp-dateFrom").value    = exp.dateFrom    || "";
+    document.getElementById("exp-dateTo").value      = exp.dateTo      || "";
+    document.getElementById("exp-description").value = exp.description || "";
+
+    // ID merken für den PUT Request
+    document.getElementById("exp-updateBtn").dataset.editId = id;
+    document.getElementById("exp-updateBtn").textContent = "Aktualisieren";
+    document.getElementById("exp-showAdd").hidden = true;
+    document.getElementById("exp-updateBtn").hidden = false;
+
+    showSection("experiences");
+}
+
+async function updateExperiences() {
+    // ID aus dem Button lesen
+    const id = document.getElementById("exp-updateBtn").dataset.editId;
+
+    // Body erst jetzt lesen – der User hat die Felder eventuell geändert
+    const body = {
+        company:     document.getElementById("exp-company").value.trim(),
+        role:        document.getElementById("exp-role").value.trim(),
+        dateFrom:    document.getElementById("exp-dateFrom").value.trim(),
+        dateTo:      document.getElementById("exp-dateTo").value.trim(),
+        description: document.getElementById("exp-description").value.trim()
+    };
+
+    const response = await fetch(`/api/cv/experiences/${id}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
+        },
+        body: JSON.stringify(body)
+    });
+
+    console.log("PUT Status:", response.status);
+
+    if (response.ok) {
+        document.getElementById("exp-company").value     = "";
+        document.getElementById("exp-role").value        = "";
+        document.getElementById("exp-dateFrom").value    = "";
+        document.getElementById("exp-dateTo").value      = "";
+        document.getElementById("exp-description").value = "";
+        document.getElementById("exp-showAdd").hidden    = false;
+        document.getElementById("exp-updateBtn").hidden  = true;
+        showSection("experiences");
+        await loadCv();
+    }
 }
 
 
