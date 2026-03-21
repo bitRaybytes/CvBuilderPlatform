@@ -9,10 +9,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AuthService {
-    /**
-     * Authentication class for login and JWT
-     *
-     * */
 
     private final AuthenticationManager authenticationManager;
     private final JwtTokenService jwtService;
