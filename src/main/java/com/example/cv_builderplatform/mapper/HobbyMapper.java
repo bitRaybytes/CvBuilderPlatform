@@ -15,7 +15,7 @@ public class HobbyMapper {
     }
 
     public HobbyEntity updateHobbyEntity(HobbyEntity entity, HobbyDTO dto){
-        entity.setId(dto.getId());
+        // entity.setId(dto.getId());
         entity.setName(dto.getName());
         return entity;
     }

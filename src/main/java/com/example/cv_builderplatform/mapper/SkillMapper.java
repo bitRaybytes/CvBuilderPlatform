@@ -26,7 +26,7 @@ public class SkillMapper {
     }
 
     public SkillEntity updateSkillEntity(SkillEntity entity, SkillDTO dto){
-        entity.setId(dto.getId());
+        // entity.setId(dto.getId());
         entity.setName(dto.getName());
         entity.setLevel(dto.getLevel());
         entity.setCategory(dto.getCategory());

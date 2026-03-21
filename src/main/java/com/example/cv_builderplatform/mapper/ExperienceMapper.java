@@ -30,7 +30,7 @@ public class ExperienceMapper {
     }
 
     public ExperienceEntity updateExperienceEntity(ExperienceEntity entity, ExperienceDTO dto){
-        entity.setId(dto.getId());
+        // entity.setId(dto.getId());
         entity.setCompany(dto.getCompany());
         entity.setRole(dto.getRole());
         entity.setDateFrom(dto.getDateFrom());

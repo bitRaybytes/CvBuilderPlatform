@@ -30,7 +30,7 @@ public class InternshipMapper {
     }
 
     public InternshipEntity updateInternshipEntity(InternshipEntity entity,InternshipDTO dto){
-        entity.setId(dto.getId());
+        // entity.setId(dto.getId());
         entity.setCompany(dto.getCompany());
         entity.setRole(dto.getRole());
         entity.setDateFrom(dto.getDateFrom());

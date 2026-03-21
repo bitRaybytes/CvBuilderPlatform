@@ -30,7 +30,7 @@ public class VolunteerMapper {
     }
 
     public VolunteerEntity updateVolunteerEntity(VolunteerEntity entity, VolunteerDTO dto){
-        entity.setId(dto.getId());
+        // entity.setId(dto.getId());
         entity.setOrganization(dto.getOrganization());
         entity.setRole(dto.getRole());
         entity.setDateFrom(dto.getDateFrom());

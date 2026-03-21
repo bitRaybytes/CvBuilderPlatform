@@ -26,7 +26,7 @@ public class CertificateMapper {
     }
 
     public CertificateEntity updateCertificateEntity(CertificateEntity entity, CertificateDTO dto){
-        entity.setId(dto.getId());
+        // entity.setId(dto.getId());
         entity.setTitle(dto.getTitle());
         entity.setIssuer(dto.getIssuer());
         entity.setDateIssued(dto.getDateIssued());

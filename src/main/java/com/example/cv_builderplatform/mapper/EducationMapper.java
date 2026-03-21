@@ -29,7 +29,7 @@ public class EducationMapper {
     }
 
     public EducationEntity updateEducationEntity(EducationEntity entity, EducationDTO dto){
-        entity.setId(dto.getId());
+        // entity.setId(dto.getId());
         entity.setFieldOfStudy(dto.getFieldOfStudy());
         entity.setDegree(dto.getDegree());
         entity.setDateFrom(dto.getDateFrom());

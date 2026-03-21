@@ -44,7 +44,7 @@ public class PersonalInfoMapper {
     }
 
     public PersonalInfoEntity updateEntity(PersonalInfoEntity entity, PersonalInfoDTO dto){
-        entity.setId(dto.getId());
+        // entity.setId(dto.getId());
         entity.setFirstname(dto.getFirstname());
         entity.setLastname(dto.getLastname());
         entity.setStreet(dto.getStreet());
