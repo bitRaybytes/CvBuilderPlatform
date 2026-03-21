@@ -35,6 +35,6 @@ public class GlobalExceptionHandler {
     // fängt alles andere – als Sicherheitsnetz
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleGeneral(Exception e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ein Fehler ist aufgetreten");
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ein Fehler ist aufgetreten\n"+e.getMessage());
     }
 }
