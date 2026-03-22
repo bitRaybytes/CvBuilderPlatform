@@ -20,7 +20,7 @@ public class InternshipMapper {
 
     public InternshipEntity toEntity(InternshipDTO dto){
         InternshipEntity entity = new InternshipEntity();
-        entity.setId(dto.getId());
+        // entity.setId(dto.getId());
         entity.setCompany(dto.getCompany());
         entity.setRole(dto.getRole());
         entity.setDateFrom(dto.getDateFrom());

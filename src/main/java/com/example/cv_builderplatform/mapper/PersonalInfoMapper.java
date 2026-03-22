@@ -27,7 +27,7 @@ public class PersonalInfoMapper {
 
     public PersonalInfoEntity toEntity(PersonalInfoDTO dto) {
         PersonalInfoEntity entity = new PersonalInfoEntity();
-        entity.setId(dto.getId());
+        // entity.setId(dto.getId());
         entity.setFirstname(dto.getFirstname());
         entity.setLastname(dto.getLastname());
         entity.setStreet(dto.getStreet());

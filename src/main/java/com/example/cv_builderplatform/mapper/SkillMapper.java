@@ -9,7 +9,7 @@ public class SkillMapper {
 
     public SkillEntity toEntity(SkillDTO dto){
         SkillEntity entity = new SkillEntity();
-        entity.setId(dto.getId());
+        // entity.setId(dto.getId());
         entity.setName(dto.getName());
         entity.setCategory(dto.getCategory());
         entity.setLevel(dto.getLevel());

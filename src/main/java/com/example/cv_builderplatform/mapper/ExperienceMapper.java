@@ -20,7 +20,7 @@ public class ExperienceMapper {
 
     public ExperienceDTO mapToDTO(ExperienceEntity entity){
         ExperienceDTO dto = new ExperienceDTO();
-        dto.setId(entity.getId());
+        // dto.setId(entity.getId());
         dto.setCompany(entity.getCompany());
         dto.setRole(entity.getRole());
         dto.setDateFrom(entity.getDateFrom());

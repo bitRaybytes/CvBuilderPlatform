@@ -20,7 +20,7 @@ public class VolunteerMapper {
 
     public VolunteerEntity toEntity (VolunteerDTO dto){
         VolunteerEntity entity = new VolunteerEntity();
-        entity.setId(dto.getId());
+        // entity.setId(dto.getId());
         entity.setRole(dto.getRole());
         entity.setDescription(dto.getDescription());
         entity.setDateTo(dto.getDateTo());

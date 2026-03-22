@@ -19,7 +19,7 @@ public class EducationMapper {
 
     public EducationEntity toEntity(EducationDTO dto){
         EducationEntity entity = new EducationEntity();
-        entity.setId(dto.getId());
+        // entity.setId(dto.getId());
         entity.setDegree(dto.getDegree());
         entity.setInstitution(dto.getInstitution());
         entity.setDateTo(dto.getDateTo());

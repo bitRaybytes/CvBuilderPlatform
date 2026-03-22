@@ -9,7 +9,7 @@ public class HobbyMapper {
 
     public HobbyEntity toEntity (HobbyDTO dto){
         HobbyEntity entity = new HobbyEntity();
-        entity.setId(dto.getId());
+        // entity.setId(dto.getId());
         entity.setName(dto.getName());
         return entity;
     }

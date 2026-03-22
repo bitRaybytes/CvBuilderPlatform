@@ -19,7 +19,7 @@ public class SignatureMapper {
 
     public SignatureEntity toEntity(SignatureDTO dto){
         SignatureEntity entity = new SignatureEntity();
-        entity.setId(dto.getId());
+        // entity.setId(dto.getId());
         entity.setCity(dto.getCity());
         entity.setSignaturePath(dto.getSignaturePath());
         entity.setSignatureDate(dto.getSignatureDate());
