@@ -117,63 +117,7 @@ function renderList(name, items, formatFn) {
     });
 }
 
-// ── Experiences : Listeneinträge editieren ─────────────────────────────────
-function editExperiences(id) {
-    const exp = cvData.experiences.find(e => e.id === id);
-    if (!exp) return;
 
-    // Felder befüllen damit der User sie sieht
-    document.getElementById("exp-company").value     = exp.company     || "";
-    document.getElementById("exp-role").value        = exp.role        || "";
-    document.getElementById("exp-dateFrom").value    = exp.dateFrom    || "";
-    document.getElementById("exp-dateTo").value      = exp.dateTo      || "";
-    document.getElementById("exp-description").value = exp.description || "";
-
-    // ID merken für den PUT Request
-    document.getElementById("exp-updateBtn").dataset.editId = id;
-    document.getElementById("exp-updateBtn").textContent = "Aktualisieren";
-    document.getElementById("exp-showAdd").hidden = true;
-    document.getElementById("exp-updateBtn").hidden = false;
-
-    showSection("experiences");
-}
-
-async function updateExperiences() {
-    // ID aus dem Button lesen
-    const id = document.getElementById("exp-updateBtn").dataset.editId;
-
-    // Body erst jetzt lesen – der User hat die Felder eventuell geändert
-    const body = {
-        company:     document.getElementById("exp-company").value.trim(),
-        role:        document.getElementById("exp-role").value.trim(),
-        dateFrom:    document.getElementById("exp-dateFrom").value.trim(),
-        dateTo:      document.getElementById("exp-dateTo").value.trim(),
-        description: document.getElementById("exp-description").value.trim()
-    };
-
-    const response = await fetch(`/api/cv/experiences/${id}`, {
-        method: "PUT",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer " + token
-        },
-        body: JSON.stringify(body)
-    });
-
-    console.log("PUT Status:", response.status);
-
-    if (response.ok) {
-        document.getElementById("exp-company").value     = "";
-        document.getElementById("exp-role").value        = "";
-        document.getElementById("exp-dateFrom").value    = "";
-        document.getElementById("exp-dateTo").value      = "";
-        document.getElementById("exp-description").value = "";
-        document.getElementById("exp-showAdd").hidden    = false;
-        document.getElementById("exp-updateBtn").hidden  = true;
-        showSection("experiences");
-        await loadCv();
-    }
-}
 
 
 // ── Format-Funktionen für Listen ─────────────────────────
@@ -221,7 +165,6 @@ async function savePersonalInfo() {
         body: JSON.stringify(body)
     });
 
-    console.log("savePersonalInfo body: "+ body);
 
     if (response.ok){
         document.getElementById("firstname").value = "";
@@ -238,8 +181,6 @@ async function savePersonalInfo() {
         await loadCv();
     };
 }
-
-
 
 // ── Experience hinzufügen ───────────────────────────────────
 // POST /api/cv/experiences
@@ -264,8 +205,6 @@ async function showAddExperience() {
         body: JSON.stringify(body)
     });
 
-        console.log("showAddExperience body: "+ body);
-
     if (response.ok){
         document.getElementById("exp-company").value="";
         document.getElementById("exp-role").value="";
@@ -274,6 +213,64 @@ async function showAddExperience() {
         document.getElementById("exp-description").value="";
         await loadCv();
     };
+}
+
+// ── Experiences : Listeneinträge editieren ─────────────────────────────────
+function editExperiences(id) {
+    const exp = cvData.experiences.find(e => e.id === id);
+    if (!exp) return;
+
+    // Felder befüllen damit der User sie sieht
+    document.getElementById("exp-company").value     = exp.company     || "";
+    document.getElementById("exp-role").value        = exp.role        || "";
+    document.getElementById("exp-dateFrom").value    = exp.dateFrom    || "";
+    document.getElementById("exp-dateTo").value      = exp.dateTo      || "";
+    document.getElementById("exp-description").value = exp.description || "";
+
+    // ID merken für den PUT Request
+    const btn = document.querySelector("#section-experiences .form-actions .btn" );
+    btn.dataset.editId = id;
+
+    btn.textContent = "Aktualisieren";
+    btn.onclick = () => updateExperiences(id);
+
+    showSection("experiences");
+}
+
+// ── Experiences : Listeneinträge aktualisieren ─────────────────────────────
+async function updateExperiences(id) {
+    const btn = document.querySelector("#section-experiences .form-actions .btn");
+
+    // Body erst jetzt lesen – der User hat die Felder eventuell geändert
+    const body = {
+        company:     document.getElementById("exp-company").value.trim(),
+        role:        document.getElementById("exp-role").value.trim(),
+        dateFrom:    document.getElementById("exp-dateFrom").value.trim(),
+        dateTo:      document.getElementById("exp-dateTo").value.trim(),
+        description: document.getElementById("exp-description").value.trim()
+    };
+
+    const response = await fetch(`/api/cv/experiences/${id}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
+        },
+        body: JSON.stringify(body)
+    });
+
+    if (response.ok) {
+        document.getElementById("exp-company").value     = "";
+        document.getElementById("exp-role").value        = "";
+        document.getElementById("exp-dateFrom").value    = "";
+        document.getElementById("exp-dateTo").value      = "";
+        document.getElementById("exp-description").value = "";
+
+        btn.textContent = "+ Eintrag hinzufügen";
+        btn.onclick = () => showAddExperience();
+
+        await loadCv();
+    }
 }
 
 // ── Education hinzufügen ───────────────────────────────────
@@ -295,8 +292,6 @@ async function showAddEducation() {
         },
         body: JSON.stringify(body)
     });
-
-        console.log("showAddEducations body: "+ body);
 
     if (response.ok){
         document.getElementById("edu-institution").value="";
@@ -521,7 +516,6 @@ async function deleteCv(id){
 
 // ── Platzhalter für noch nicht implementierte Methoden ───
 // Diese Schritt für Schritt in cv.js ausbauen
-// function editExperiences(id)  { console.log("editExperience - TODO", id); }
 function editEducations(id)   { console.log("editEducation - TODO", id); }
 function editSkills(id)       { console.log("editSkill - TODO", id); }
 function editCertificates(id) { console.log("editCertificate - TODO", id); }
