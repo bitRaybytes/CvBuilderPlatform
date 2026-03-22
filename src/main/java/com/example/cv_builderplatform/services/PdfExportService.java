@@ -1,5 +1,7 @@
 package com.example.cv_builderplatform.services;
 
+import com.itextpdf.text.Font;
+import com.itextpdf.text.pdf.BaseFont;
 import org.springframework.stereotype.Service;
 
 import com.example.cv_builderplatform.dto.cv.CertificateDTO;
@@ -22,167 +24,193 @@ import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 /**
- * Appliying for a job with this resumee is not recommended yet. :)
+ * Applying for a job with this resumee is not recommended yet. :)
  */
 
 
 @Service
 public class PdfExportService {
 
-    private static final String TABPIPE = "\t|\t";
+    // Fonts – BaseFont für Umlaut-Unterstützung
+    private static Font fontName;
+    private static Font fontSection;
+    private static Font fontBody;
+    private static Font fontMuted;
+
+    static {
+        try {
+            BaseFont base = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.EMBEDDED);
+            fontName    = new Font(base, 20, Font.BOLD);
+            fontSection = new Font(base, 12, Font.BOLD);
+            fontBody    = new Font(base, 10, Font.NORMAL);
+            fontMuted   = new Font(base, 9,  Font.ITALIC);
+        } catch (Exception e) {
+            // Fallback auf Standard-Font
+            fontName    = new Font(Font.FontFamily.HELVETICA, 20, Font.BOLD);
+            fontSection = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
+            fontBody    = new Font(Font.FontFamily.HELVETICA, 10, Font.NORMAL);
+            fontMuted   = new Font(Font.FontFamily.HELVETICA,  9, Font.ITALIC);
+        }
+    }
 
     public byte[] exportCv(CvResponseDTO cvDto) {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        Document document = new Document(PageSize.A4, 40, 40, 50, 50);
+        Document document = new Document(PageSize.A4, 56, 56, 56, 56);
 
         try {
-        
             PdfWriter.getInstance(document, out);
             document.open();
 
-            // Persönliche Daten hinzufügen
+            // Persönliche Daten
             PersonalInfoDTO p = cvDto.getPersonals();
-            if (p != null) {    
-            
-                document.add(new Paragraph("Persönliche Informationen"));
-                Paragraph name =    new Paragraph("Vor- und Zuname "+p.getFirstname() + " " + p.getLastname());
-                Paragraph birth =   new Paragraph("Geburtstag: " + p.getBirthDate()+ TABPIPE + "Geburtsort: "+p.getBirthplace());
-                Paragraph addres =  new Paragraph("Adresse: " + p.getStreet() + ", " + p.getCity() + " - "+p.getZip() + " "+p.getCountry());
-                Paragraph kontakt = new Paragraph("E-Mail: " + p.getEmail() + TABPIPE + "Mobil: " + p.getPhone());
-                Paragraph summary = new Paragraph("Zusammenfassung: " + p.getSummary());
-                
-                document.add(name); 
-                document.add(birth);
-                document.add(addres);
-                document.add(kontakt);
-                document.add(summary);
+            if (p != null) {
+                // Name groß und fett – ATS liest das als Hauptidentifikator
+                document.add(new Paragraph(p.getFirstname() + " " + p.getLastname(), fontName));
+
+                // Kontaktdaten in separaten Zeilen – keine Tabs
+                // ATS parst zeilenweise – Tabs verwirren den Parser
+                if (p.getEmail() != null)
+                    document.add(new Paragraph("E-Mail: "+p.getEmail(), fontBody));
+                if (p.getPhone() != null)
+                    document.add(new Paragraph("Telefon: "+ p.getPhone(), fontBody));
+                if (p.getStreet() != null)
+                    document.add(new Paragraph("Adresse: "+
+                            p.getStreet() + ", " + p.getZip() + " " + p.getCity(), fontBody));
+                if (p.getBirthDate() != null)
+                    document.add(new Paragraph(
+                            "Geburtsdatum /-ort: " + p.getBirthDate() + ", " + p.getBirthplace(), fontBody));
+                if (p.getSummary() != null && !p.getSummary().isBlank()) {
+                    document.add(new Paragraph(" "));
+                    document.add(new Paragraph(p.getSummary(), fontBody));
+                }
             }
-            
-            addNewLine(document);
 
-            // Berufserfahrung hinzufügen
-
+            // Berufserfahrung
             List<ExperienceDTO> exp = cvDto.getExperiences();
-
-            if (exp!= null && !exp.isEmpty()){
-                document.add(new Paragraph("Berufserfahrung"));
-
-                for(ExperienceDTO e : exp){
-                    Paragraph company =     new Paragraph("Unternehmen: "+ e.getCompany() + TABPIPE +"Position: "+ e.getRole());
-                    Paragraph dateFromTo =  new Paragraph("von " + e.getDateFrom() + " bis " +e.getDateTo());
-                    Paragraph expSummary =  new Paragraph("Beschreibung: "+e.getDescription());
-
-                    document.add(company);
-                    document.add(dateFromTo);
-                    document.add(expSummary);
+            if (exp != null && !exp.isEmpty()) {
+                addSectionTitle(document, "Berufserfahrung");
+                for (ExperienceDTO e : exp) {
+                    // Rolle und Unternehmen in einer Zeile – ATS-Standard
+                    document.add(new Paragraph("Position: "+e.getRole() + " – " + e.getCompany(), fontBody));
+                    document.add(new Paragraph(
+                            formatDateRange(e.getDateFrom(), e.getDateTo()), fontMuted));
+                    if (e.getDescription() != null && !e.getDescription().isBlank())
+                        document.add(new Paragraph(e.getDescription(), fontBody));
+                    document.add(new Paragraph(" "));
                 }
             }
-            
-            addNewLine(document);
 
-            // Ausbildung hinzufügen
+            // Ausbildung
             List<EducationDTO> educations = cvDto.getEducations();
-            if (educations !=null&&!educations.isEmpty()) {
-                document.add(new Paragraph("Ausbildung"));
-                for(EducationDTO edus : educations){
-                    Paragraph eduInstitution =  new Paragraph("Insitution/Schule: " + edus.getInstitution() + TABPIPE + "Abschluss: "+ edus.getDegree());
-                    Paragraph eduDates =        new Paragraph("Fallstudie: "+edus.getFieldOfStudy() + " vom: " + edus.getDateFrom() + " bis "+ edus.getDateTo());
-
-                    document.add(eduInstitution);
-                    document.add(eduDates);
+            if (educations != null && !educations.isEmpty()) {
+                addSectionTitle(document, "Ausbildung");
+                for (EducationDTO e : educations) {
+                    document.add(new Paragraph("Abschluss: "+ e.getDegree() + " – " + e.getInstitution(), fontBody));
+                    if (e.getFieldOfStudy() != null)
+                        document.add(new Paragraph("Studienfach: "+ e.getFieldOfStudy(), fontBody));
+                    document.add(new Paragraph(
+                            formatDateRange("Vom "+e.getDateFrom()," bis "+ e.getDateTo()), fontMuted));
+                    document.add(new Paragraph(" "));
                 }
             }
-            addNewLine(document);
-            
 
-            // Zertifikate hinzufügen
+            // Fähigkeiten – ATS sucht hier nach Keywords
+            List<SkillDTO> skills = cvDto.getSkills();
+            if (skills != null && !skills.isEmpty()) {
+                addSectionTitle(document, "Faehigkeiten");
+                for (SkillDTO s : skills) {
+                    // Kein Sonderzeichen vor dem Skill – ATS parst Bindestriche manchmal als Trennzeichen
+                    document.add(new Paragraph(
+                            s.getName() + " | " + s.getCategory() + " | " + s.getLevel(), fontBody));
+                }
+                document.add(new Paragraph(" "));
+            }
+
+            // Zertifikate
             List<CertificateDTO> certs = cvDto.getCertificates();
-            if (certs !=null && !certs.isEmpty()) {
-                document.add(new Paragraph("Zertifikate"));
-                for (CertificateDTO cert : certs){
-                    Paragraph info =        new Paragraph("Zertifikat: "+cert.getTitle());
-                    Paragraph certInfo =    new Paragraph("ausgestellt von: " + cert.getIssuer()+" am " + cert.getDateIssued());
-
-                    document.add(info);
-                    document.add(certInfo);
+            if (certs != null && !certs.isEmpty()) {
+                addSectionTitle(document, "Zertifikate");
+                for (CertificateDTO c : certs) {
+                    document.add(new Paragraph(c.getTitle(), fontBody));
+                    document.add(new Paragraph(
+                            c.getIssuer() + ", " + c.getDateIssued(), fontMuted));
+                    document.add(new Paragraph(" "));
                 }
             }
-            
-            addNewLine(document);
 
-            // Internships hinzufügen
+            // Praktika
             List<InternshipDTO> internships = cvDto.getInternships();
-            if (internships !=null && !internships.isEmpty()) {
-                document.add(new Paragraph("Praktika"));
-                for(InternshipDTO i : internships){
-                    Paragraph compRole = new Paragraph("Unternehmen: "+ i.getCompany() + TABPIPE+"Position: "+ i.getRole());
-                    Paragraph iDates =   new Paragraph("vom: " + i.getDateFrom() + " bis "+ i.getDateTo());
-
-                    document.add(compRole);
-                    document.add(iDates);
+            if (internships != null && !internships.isEmpty()) {
+                addSectionTitle(document, "Praktika");
+                for (InternshipDTO i : internships) {
+                    document.add(new Paragraph(i.getRole() + " – " + i.getCompany(), fontBody));
+                    document.add(new Paragraph(
+                            formatDateRange(i.getDateFrom(), i.getDateTo()), fontMuted));
+                    if (i.getDescription() != null && !i.getDescription().isBlank())
+                        document.add(new Paragraph(i.getDescription(), fontBody));
+                    document.add(new Paragraph(" "));
                 }
             }
-            addNewLine(document);
-            
-            // Volunteers hinzufügen
+
+            // Ehrenamt
             List<VolunteerDTO> volunteers = cvDto.getVolunteers();
             if (volunteers != null && !volunteers.isEmpty()) {
-                document.add(new Paragraph("Ehrenamt"));
-                for (VolunteerDTO v : volunteers){
-                    Paragraph orga = new Paragraph("Organisation: " + v.getOrganization());
-                    Paragraph date = new Paragraph("Rolle: "+v.getRole() +" vom " + v.getDateFrom() + " bis " + v.getDateTo());
-                    Paragraph desc = new Paragraph("Beschreibung: " + v.getDescription());
-    
-                    document.add(orga);
-                    document.add(date);
-                    document.add(desc);
+                addSectionTitle(document, "Ehrenamtliches Engagement");
+                for (VolunteerDTO v : volunteers) {
+                    document.add(new Paragraph(v.getRole() + " – " + v.getOrganization(), fontBody));
+                    document.add(new Paragraph(
+                            formatDateRange(v.getDateFrom(), v.getDateTo()), fontMuted));
+                    if (v.getDescription() != null && !v.getDescription().isBlank())
+                        document.add(new Paragraph(v.getDescription(), fontBody));
+                    document.add(new Paragraph(" "));
                 }
             }
 
-            addNewLine(document);
-
-            // Skills hinzufügen
-            List<SkillDTO> skills = cvDto.getSkills();
-            if(skills !=null && !skills.isEmpty()){
-                document.add(new Paragraph("Fähigkeiten"));
-                for (SkillDTO s : skills){
-                    Paragraph skill = new Paragraph("- " +s.getName() +", "+s.getCategory() + ", "+s.getLevel());
-                    document.add(skill);
-                }
-            }
-            
-
-            // Hobbies hinzufügen
+            // Hobbys – ATS liest das selten aber es schadet nicht
             List<HobbyDTO> hobbies = cvDto.getHobbies();
-            if(hobbies !=null&&!hobbies.isEmpty()){
-                document.add(new Paragraph("Hobbys"));
-                for(HobbyDTO h : hobbies){
-                    Paragraph hobby = new Paragraph("- " + h.getName());
-                    document.add(hobby);
+            if (hobbies != null && !hobbies.isEmpty()) {
+                addSectionTitle(document, "Interessen");
+                StringBuilder hobbyLine = new StringBuilder();
+                for (int i = 0; i < hobbies.size(); i++) {
+                    hobbyLine.append(hobbies.get(i).getName());
+                    if (i < hobbies.size() - 1) hobbyLine.append(", ");
                 }
+                document.add(new Paragraph(hobbyLine.toString(), fontBody));
+                document.add(new Paragraph(" "));
             }
-            
 
-            // Signatur hinzufügen
+            // Signatur
             SignatureDTO sig = cvDto.getSignature();
-            if (sig != null) {
-                Paragraph sigStats = new Paragraph(sig.getCity()+", den "+sig.getSignatureDate());
-                document.add(sigStats);
+            if (sig != null && sig.getCity() != null) {
+                document.add(new Paragraph(" "));
+                document.add(new Paragraph(
+                        sig.getCity() + ", " + sig.getSignatureDate(), fontBody));
             }
-            
+
             document.close();
-            // Puffer als byte[] zurückgeben
             return out.toByteArray();
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return new byte[0];  // leeres Array statt null - sicherer
+            return new byte[0];
         }
     }
 
-    private void addNewLine(Document doc) throws Exception{
+    // Sektionsüberschrift – fett, mit Linie darunter
+    // ATS erkennt Sektionen über konsistente Formatierung
+    private void addSectionTitle(Document doc, String title) throws Exception {
+        doc.add(new Paragraph(" "));
+        Paragraph p = new Paragraph(title.toUpperCase(), fontSection);
+        p.setSpacingAfter(4);
+        doc.add(p);
         doc.add(new LineSeparator());
         doc.add(new Paragraph(" "));
     }
-   
+
+    // Datumsbereich – null-sicher
+    private String formatDateRange(Object from, Object to) {
+        String f = from != null ? from.toString() : "–";
+        String t = to   != null ? to.toString()   : "heute";
+        return f + " – " + t;
+    }
 }
