@@ -1,6 +1,6 @@
 # CV Builder Platform
 
-A REST API for building and exporting professional CVs. Built with Spring Boot, secured with JWT, backed by PostgreSQL, and containerized with Docker.
+A REST API for building and exporting professional ATS readable CVs. Built with Spring Boot, secured with JWT, backed by PostgreSQL, and containerized with Docker.
 
 ---
 
