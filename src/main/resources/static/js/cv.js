@@ -436,15 +436,36 @@ async function addHobby() {
 }
 
 
+
 // ── Speichern: Signatur ───────────────────────────────────
 // POST /api/cv/signature
+// async function saveSignature() {
+//     const fileInput = document.getElementById("sigPath");
+//     const file = fileInput.files[0]; // die tatsächliche Datei
+
+//     const formData = new FormData();
+//     formData.append("signaturePath", file);
+//     formData.append("city", document.getElementById("sigCity").value);
+//     formData.append("signatureDate", document.getElementById("sigDate").value);
+
+//     const response = await fetch("/api/cv/signature", {
+//         method: "POST",
+//         headers: {
+//             // KEIN Content-Type hier – Browser setzt es automatisch mit Boundary
+//             "Authorization": "Bearer " + token
+//         },
+//         body: formData  // kein JSON.stringify()
+//     });
+// }
+
 async function saveSignature() {
+    // Nur Stadt und Datum – POST /api/cv/signature mit JSON
     const body = {
         city:          document.getElementById("sigCity").value,
         signatureDate: document.getElementById("sigDate").value
     };
 
-    const response = await fetch("/api/cv/signature",{
+    const response = await fetch("/api/cv/signature", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -453,25 +474,40 @@ async function saveSignature() {
         body: JSON.stringify(body)
     });
 
-    if (response.ok) {
-        document.getElementById("sigCity").value = "";
-        document.getElementById("sigDate").value = "";
-        await loadCv();
-    }
+    if (response.ok) await loadCv();
+}
+
+async function uploadSignatureFile() {
+    // Nur Datei – POST /api/cv/signature/upload mit FormData
+    const fileInput = document.getElementById("sig-file");
+    if (!fileInput || !fileInput.files[0]) return;
+
+    const formData = new FormData();
+    formData.append("file", fileInput.files[0]);
+
+    const response = await fetch("/api/cv/signature/upload", {
+        method: "POST",
+        headers: {
+            "Authorization": "Bearer " + token
+        },
+        body: formData
+    });
+
+    if (response.ok) await loadCv();
 }
 
 
 // ── Export PDF Funktion ───────────────────────────────────
 // GET /api/cv/pdfExport
 async function exportPdf() {
-
+    
     const response = await fetch("/api/cv/pdfExport", {
         method: "GET",
         headers:{
             "Authorization": "Bearer " + token
         }
     })
-
+    
     if (response.ok){
         // response.blob() wandelt die Antwort in eine Binärdatei um
         const blob = await response.blob();
