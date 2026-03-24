@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;
 
@@ -24,6 +25,14 @@ public class SignatureController {
             @RequestBody SignatureDTO dto){
         SignatureDTO saved = service.addSignature(userDetails.getUsername(),dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+    }
+
+    @PostMapping("/upload")
+    public ResponseEntity<SignatureDTO> uploadSignatureFile(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestParam("file") MultipartFile file) {
+        SignatureDTO saved = service.uploadSignature(userDetails.getUsername(), file);
+        return ResponseEntity.ok(saved);
     }
 
     @PutMapping("/{id}")
