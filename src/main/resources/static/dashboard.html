@@ -185,7 +185,7 @@
                             <input type="text" id="skillName" placeholder="z.B. Java" />
                         </div>
                         <div class="field">
-                            <label for="skillCategory">Kategorie</label>
+                            <label for="skillCat">Kategorie</label>
                             <input type="text" id="skillCat" placeholder="z.B. Programmierung" />
                             <!-- <select id="skillCategory">
                                 <option value="IT">IT</option>
@@ -321,6 +321,10 @@
                 <p class="section-subtitle">Ort und Datum für die Unterschrift im PDF.</p>
                 <div class="card">
                     <div class="form-grid">
+                        <div class="field">
+                            <label for="sigPath">Unterschrift hochladen</label>
+                            <input type="file" id="sigPath" accept="image/png, image/jpeg" placeholder="Signatur hochladen (jpeg/png)"/>
+                        </div>
                         <div class="field">
                             <label for="sigCity">Ort</label>
                             <input type="text" id="sigCity" />
