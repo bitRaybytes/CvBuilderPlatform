@@ -43,7 +43,7 @@ public class SignatureService {
 
     public SignatureDTO uploadSignature(String username, MultipartFile file){
         CvEntity cv = cvService.getOrCreateCvByUsername(username);
-        SignatureEntity entity = repo.findByCv(cv).orElseGet(()-> new SignatureEntity());
+        SignatureEntity entity = repo.findByCv(cv).orElseGet(SignatureEntity::new);
         if (file != null && !file.isEmpty()){
             try {
                 String path = sigImgUploader.upload(file, username);
