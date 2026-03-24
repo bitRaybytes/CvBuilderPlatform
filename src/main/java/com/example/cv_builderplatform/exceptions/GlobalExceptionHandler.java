@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    // fängt deine eigene Exception
+    // fängt eigene Exception
     @ExceptionHandler(CvNotFoundException.class)
     public ResponseEntity<String> handleCvNotFound(CvNotFoundException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
