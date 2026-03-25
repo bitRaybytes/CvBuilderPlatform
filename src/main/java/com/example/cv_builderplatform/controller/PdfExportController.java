@@ -24,7 +24,7 @@ public class PdfExportController {
     private final PdfExportService pdfService;
     private final CvService cvService;
     
-    @GetMapping("/cv/pdfExport")
+    @GetMapping("/cv/pdfexport")
     public ResponseEntity<byte[]> exportCvAsPdf(
         // AuthenticationPrincipal because Get Method doesnt read from @RequestBody
         @AuthenticationPrincipal UserDetails userDetail){
@@ -33,7 +33,7 @@ public class PdfExportController {
         byte[] content = pdfService.exportCv(cvDto);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=lebenslauf.pdf");
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+ userDetail.getUsername()+"_lebenslauf.pdf");
         
         return ResponseEntity.ok()
         .headers(headers)

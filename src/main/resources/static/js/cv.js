@@ -501,7 +501,7 @@ async function uploadSignatureFile() {
 // GET /api/cv/pdfExport
 async function exportPdf() {
     
-    const response = await fetch("/api/cv/pdfExport", {
+    const response = await fetch("/api/cv/pdfexport", {
         method: "GET",
         headers:{
             "Authorization": "Bearer " + token
