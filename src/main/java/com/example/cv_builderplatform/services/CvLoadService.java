@@ -31,26 +31,37 @@ public class CvLoadService {
     private final SkillMapper skilMapper;
     private final VolunteerMapper voluMapper;
 
-    public CvLoadService(CvService cvService, CertificateRepository certRepo, EducationRepository educRepo, ExperienceRepository expeRepo, HobbyRepository hobbRepo, InternshipRepository inteRepo, PersonalInfoRepository persRepo, SignatureRepository signRepo, SkillRepository skilRepo, VolunteerRepository voluRepo, CertificateMapper certMapper, EducationMapper educMapper, ExperienceMapper expeMapper, HobbyMapper hobbMapper, InternshipMapper inteMapper, PersonalInfoMapper persMapper, SignatureMapper signMapper, SkillMapper skilMapper, VolunteerMapper voluMapper) {
-        this.cvService = cvService;
-        this.certRepo = certRepo;
-        this.educRepo = educRepo;
-        this.expeRepo = expeRepo;
-        this.hobbRepo = hobbRepo;
-        this.inteRepo = inteRepo;
-        this.persRepo = persRepo;
-        this.signRepo = signRepo;
-        this.skilRepo = skilRepo;
-        this.voluRepo = voluRepo;
-        this.certMapper = certMapper;
-        this.educMapper = educMapper;
-        this.expeMapper = expeMapper;
-        this.hobbMapper = hobbMapper;
-        this.inteMapper = inteMapper;
-        this.persMapper = persMapper;
-        this.signMapper = signMapper;
-        this.skilMapper = skilMapper;
-        this.voluMapper = voluMapper;
+    public CvLoadService(
+        CvService cvService,             CertificateRepository certRepo, 
+        EducationRepository educRepo,    ExperienceRepository expeRepo, 
+        HobbyRepository hobbRepo,        InternshipRepository inteRepo, 
+        PersonalInfoRepository persRepo, SignatureRepository signRepo, 
+        SkillRepository skilRepo,        VolunteerRepository voluRepo, 
+        CertificateMapper certMapper,    EducationMapper educMapper, 
+        ExperienceMapper expeMapper,     HobbyMapper hobbMapper, 
+        InternshipMapper inteMapper,     PersonalInfoMapper persMapper, 
+        SignatureMapper signMapper,      SkillMapper skilMapper, 
+        VolunteerMapper voluMapper) {
+
+                this.cvService = cvService;
+                this.certRepo = certRepo;
+                this.educRepo = educRepo;
+                this.expeRepo = expeRepo;
+                this.hobbRepo = hobbRepo;
+                this.inteRepo = inteRepo;
+                this.persRepo = persRepo;
+                this.signRepo = signRepo;
+                this.skilRepo = skilRepo;
+                this.voluRepo = voluRepo;
+                this.certMapper = certMapper;
+                this.educMapper = educMapper;
+                this.expeMapper = expeMapper;
+                this.hobbMapper = hobbMapper;
+                this.inteMapper = inteMapper;
+                this.persMapper = persMapper;
+                this.signMapper = signMapper;
+                this.skilMapper = skilMapper;
+                this.voluMapper = voluMapper;
     }
 
     public CvResponseDTO loadFullCv(String username){
