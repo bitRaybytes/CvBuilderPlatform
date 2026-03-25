@@ -27,7 +27,7 @@ public abstract class AbstractFileUploadHandler implements FileUploadHandler {
     // Template Method – der Ablauf ist fest, die Schritte sind variabel
     @Override
     public String upload(MultipartFile file, String username) throws IOException {
-        validate(file);                              // Subklasse validiert
+        validate(file, file.getSize());                              // Subklasse validiert
         String path = buildFilePath(username,
             sanitizeFilename(file.getOriginalFilename()));
         return store(file, path);                    // Subklasse speichert
