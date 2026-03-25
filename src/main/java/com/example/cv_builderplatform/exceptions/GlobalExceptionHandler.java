@@ -1,9 +1,12 @@
 package com.example.cv_builderplatform.exceptions;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
 
 
 /**
@@ -15,7 +18,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    // fängt eigene Exception
+    // fängt eigene CV Exception
     @ExceptionHandler(CvNotFoundException.class)
     public ResponseEntity<String> handleCvNotFound(CvNotFoundException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
@@ -30,6 +33,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<String> handleUserNotFound(UserNotFoundException e){
         return ResponseEntity.status(HttpStatus.CONFLICT).body("User nicht gefunden");
+    }
+
+    @ExceptionHandler(FileNotFoundException.class)
+    public ResponseEntity<String> handleFileNotFound(FileNotFoundException e){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Datei nicht gefunden");
     }
 
     // fängt alles andere – als Sicherheitsnetz
