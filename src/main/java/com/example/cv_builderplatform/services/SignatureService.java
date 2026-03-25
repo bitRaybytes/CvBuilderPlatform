@@ -4,7 +4,7 @@ import com.example.cv_builderplatform.dto.cv.SignatureDTO;
 import com.example.cv_builderplatform.entities.CvEntity;
 import com.example.cv_builderplatform.entities.subEntities.SignatureEntity;
 import com.example.cv_builderplatform.exceptions.DataIntegrityViolationException;
-import com.example.cv_builderplatform.handler.SignatureImageUploadHandler;
+import com.example.cv_builderplatform.handler.ImageUploadHandler;
 import com.example.cv_builderplatform.mapper.SignatureMapper;
 import com.example.cv_builderplatform.repositories.SignatureRepository;
 
@@ -19,13 +19,13 @@ public class SignatureService {
     private final CvService cvService;
     private final SignatureMapper mapper;
     private final SignatureRepository repo;
-    private final SignatureImageUploadHandler sigImgUploader;
+    private final ImageUploadHandler sigImgUploader;
 
     public SignatureService(
             CvService cvService,
             SignatureMapper mapper,
             SignatureRepository repo,
-            SignatureImageUploadHandler sigImgUploader) {
+            ImageUploadHandler sigImgUploader) {
         this.cvService = cvService;
         this.mapper = mapper;
         this.repo = repo;
