@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileNotFoundException;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -19,6 +20,14 @@ public class SignatureController {
 
     private final SignatureService service;
 
+    // @PostMapping
+    // public ResponseEntity<SignatureDTO> saveSignature(
+    //         @AuthenticationPrincipal UserDetails userDetails,
+    //         @RequestBody SignatureDTO dto){
+    //     SignatureDTO saved = service.addSignature(userDetails.getUsername(),dto);
+    //     return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+    // }
+
     @PostMapping
     public ResponseEntity<SignatureDTO> saveSignature(
             @AuthenticationPrincipal UserDetails userDetails,
@@ -27,10 +36,10 @@ public class SignatureController {
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
-    @PostMapping("/upload")
+    @PostMapping("/upload-signature")
     public ResponseEntity<SignatureDTO> uploadSignatureFile(
             @AuthenticationPrincipal UserDetails userDetails,
-            @RequestParam("file") MultipartFile file) {
+            @RequestParam("file") MultipartFile file) throws FileNotFoundException {
         SignatureDTO saved = service.uploadSignature(userDetails.getUsername(), file);
         return ResponseEntity.ok(saved);
     }
