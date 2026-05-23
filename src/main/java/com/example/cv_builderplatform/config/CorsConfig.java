@@ -17,7 +17,7 @@ public class CorsConfig {
 
         config.setAllowedOrigins(List.of("http://localhost:63342", "http://localhost:5500"));
 
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
 
         config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
 
