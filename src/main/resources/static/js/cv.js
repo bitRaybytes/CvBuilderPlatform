@@ -182,6 +182,25 @@ async function savePersonalInfo() {
     };
 }
 
+async function uploadProfilePictureFile() {
+    // Nur Datei – POST /api/cv/personals/upload mit FormData
+    const fileInput = document.getElementById("profilePicture");
+    if (!fileInput || !fileInput.files[0]) return;
+
+    const formData = new FormData();
+    formData.append("file", fileInput.files[0]);
+
+    const response = await fetch("/api/cv/personals/upload-profile-picture", {
+        method: "POST",
+        headers: {
+            "Authorization": "Bearer " + token
+        },
+        body: formData
+    });
+
+    if (response.ok) await loadCv();
+}
+
 // ── Experience hinzufügen ───────────────────────────────────
 // POST /api/cv/experiences
 async function showAddExperience() {
@@ -460,18 +479,30 @@ async function addHobby() {
 
 async function saveSignature() {
     // Nur Stadt und Datum – POST /api/cv/signature mit JSON
-    const body = {
-        city:          document.getElementById("sigCity").value,
-        signatureDate: document.getElementById("sigDate").value
-    };
+    const fileInput = document.getElementById("sigPath");
+    const city = document.getElementById("sigCity").value;
+    const date = document.getElementById("sigDate").value;
+    
+    const formData = new FormData();
+
+    if (fileInput && fileInput.files[0]) {
+        formData.append("file", fileInput.files[0]);
+    }
+
+    formData.append("city", city);
+    formData.append("signatureDate", date);
+
+    // const body = {
+    //     city:          document.getElementById("sigCity").value,
+    //     signatureDate: document.getElementById("sigDate").value
+    // };
 
     const response = await fetch("/api/cv/signature", {
         method: "POST",
         headers: {
-            "Content-Type": "application/json",
             "Authorization": "Bearer " + token
         },
-        body: JSON.stringify(body)
+        body: formData
     });
 
     if (response.ok) await loadCv();
@@ -485,7 +516,7 @@ async function uploadSignatureFile() {
     const formData = new FormData();
     formData.append("file", fileInput.files[0]);
 
-    const response = await fetch("/api/cv/signature/upload", {
+    const response = await fetch("/api/cv/signature/upload-signature", {
         method: "POST",
         headers: {
             "Authorization": "Bearer " + token
