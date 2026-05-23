@@ -11,8 +11,18 @@ HELP.md
 Mapper_DRAFT.java
 tree.yaml
 .gitattributes
+mvnw
+mvnw.cmd
+.mvn
 
-
+# Java Package Files (Github: https://github.com/github/gitignore/blob/main/Java.gitignore)#
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
 
 
 ### STS ###
