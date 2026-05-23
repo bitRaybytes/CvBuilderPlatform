@@ -44,6 +44,7 @@ public class PersonalInfoEntity {
     private String photoPath;
     private String summary;     // Kurzprofil / Über mich
 
+    private String profilePicturePath;
     private Integer sortOrder;
 
 }
