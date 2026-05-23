@@ -21,6 +21,7 @@ public class PersonalInfoMapper {
         dto.setBirthDate(entity.getBirthDate());
         dto.setBirthplace(entity.getBirthplace());
         dto.setSummary(entity.getSummary());
+        dto.setProfilePicturePath(entity.getProfilePicturePath());
 
         return dto;
     }
@@ -39,6 +40,7 @@ public class PersonalInfoMapper {
         entity.setBirthDate(dto.getBirthDate());
         entity.setBirthplace(dto.getBirthplace());
         entity.setSummary(dto.getSummary());
+        entity.setProfilePicturePath(dto.getProfilePicturePath());
 
         return entity;
     }
@@ -56,6 +58,7 @@ public class PersonalInfoMapper {
         entity.setBirthDate(dto.getBirthDate());
         entity.setBirthplace(dto.getBirthplace());
         entity.setSummary(dto.getSummary());
+        entity.setProfilePicturePath(dto.getProfilePicturePath());
 
         return entity;
     }
