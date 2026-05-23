@@ -11,6 +11,7 @@ import com.example.cv_builderplatform.repositories.SignatureRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.UUID;
 
@@ -41,9 +42,9 @@ public class SignatureService {
         return mapper.mapToDTO(saved);
     }
 
-    public SignatureDTO uploadSignature(String username, MultipartFile file){
+    public SignatureDTO uploadSignature(String username, MultipartFile file) throws FileNotFoundException{
         CvEntity cv = cvService.getOrCreateCvByUsername(username);
-        SignatureEntity entity = repo.findByCv(cv).orElseGet(SignatureEntity::new);
+        SignatureEntity entity = repo.findByCv(cv).orElseThrow(()->new FileNotFoundException("Keine Signatur gefunden"));
         if (file != null && !file.isEmpty()){
             try {
                 String path = sigImgUploader.upload(file, username);
