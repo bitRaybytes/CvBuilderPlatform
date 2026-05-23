@@ -25,6 +25,7 @@ public class PersonalInfoDTO {
     private LocalDate birthDate;
     private String birthplace;
     private String summary;
+    private String profilePicturePath;
 
 
 }
