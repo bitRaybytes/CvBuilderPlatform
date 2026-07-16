@@ -29,7 +29,7 @@ A REST API for building and exporting professional ATS readable CVs. Built with 
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/dein-name/cv-builderplatform.git
+git clone https://github.com/bitRaybytes/cv-builderplatform.git
 cd cv-builderplatform
 ```
 
